@@ -1,0 +1,26 @@
+* Tydzien 2 - App Service
+  (Wszystkich purystow jezykowych z gory przepraszam - czcionka PL pojawi sie soon^TM)
+
+** The code
+   aplikacja pochodzi z mojej [[https://github.com/pnowosie/containers-play][zabawy kontenerami]] sprzed paru dni, jednak kod by dzialal z AppService-m
+   musi miec plik pythona w glownym katalogu. Przystosuje, w wolnym czasie, przyklad by dzialal w obu scenariuszach. 
+
+*** Konfiguracja
+    Frontend dostaje url do backend-u w zmiennej srodowiskowej 'BACKEND_URL', podobnie backend z 'DATABASE_URL'
+    pobiera connection string-a. AppService zmienne zdefiniowane w Settings/Configuration dostarcza do aplikacji
+    przez zmienne srodowiskowe.
+
+**** Connection string
+     Zadzialal std connStr bez zadnych udziwnien ktore sugeruje Azure a wiec
+     `postgresql://<USER_NAME>@<DB_SERVER>:<PASSWORD>@<DB_SERVER>.postgres.database.azure.com:5432/<BD_NAME>`
+
+   Oprocz dodawania eltow konfiguracyjnych w portalu mamy do dyspozycji [[https://docs.microsoft.com/en-us/cli/azure/webapp/config/appsettings?view=azure-cli-latest#az-webapp-config-appsettings-set][polecenie]]
+   `az webapp config appsettings set --name <app-name> --resource-group <app-resource-group> --settings KEY1="value1" KEY2="value2"`
+
+** Deployment
+    Publikacja obu komponentow z vscode (pod prawym przyciskiem na katalogu z appka). 
+    Trzeba jednak uwazac gdy tworzymy nowy AppService na domyslna konfiguracje polecenia (wybieraj advanced)
+    lub stworz w portalu i publikuj z vscode.
+
+*** Trouble Shooting
+    Przydala sie opcja "Monitoring/Log Stream" by wylapac bledy w ConnStr.
