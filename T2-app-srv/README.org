@@ -17,6 +17,11 @@
    Oprocz dodawania eltow konfiguracyjnych w portalu mamy do dyspozycji [[https://docs.microsoft.com/en-us/cli/azure/webapp/config/appsettings?view=azure-cli-latest#az-webapp-config-appsettings-set][polecenie]]
    `az webapp config appsettings set --name <app-name> --resource-group <app-resource-group> --settings KEY1="value1" KEY2="value2"`
 
+ 
+*** Baza
+    Majac utworzony przez portal serwer postgres-a, logujemy sie przez psql i tworzymy baze danych oraz table z przykladowymi wierszami 
+    korzystajac z zamieszczonego w katalogu backend skryptu /.sql/
+
 ** Deployment
     Publikacja obu komponentow z vscode (pod prawym przyciskiem na katalogu z appka). 
     Trzeba jednak uwazac gdy tworzymy nowy AppService na domyslna konfiguracje polecenia (wybieraj advanced)
@@ -24,3 +29,9 @@
 
 *** Trouble Shooting
     Przydala sie opcja "Monitoring/Log Stream" by wylapac bledy w ConnStr.
+
+** Pytania
+   
+   - Logowanie z aplikacji do /log stream/ - print na stdout nie dziala
+     Dziala: App Service Logs > Wlaczamy 'File System'
+   - Jak zarzadzac baza dla AppService-u porzadnie? Zaimplementowac mechanizm migracji?
