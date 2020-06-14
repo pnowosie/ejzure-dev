@@ -1,19 +1,19 @@
 import logging
 import json
 import os
-import psycopg2
+import pyodbc
 import azure.functions as func
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
-    # connection_dsn = 'user=DB_USER@AZURE_DB_SERVER password=xxx dbname=DB_NAME host=AZURE_DB_SERVER.postgres.database.azure.com port=5432'
-    connection_dsn = os.environ['CONNECTION_STRING']
+    # connection_string = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=<server>.database.windows.net;PORT=1433;DATABASE=<database>;UID=<user>;PWD=<password>'
+    connection_string = os.environ['CONNECTION_STRING']
     
-    conn = psycopg2.connect(connection_dsn)
+    conn = pyodbc.connect(connection_string)
 
     cur = conn.cursor()
-    cur.execute('SELECT author, quote FROM quotes ORDER BY random();')
+    cur.execute('SELECT TOP 1 author, quote FROM quotes ORDER BY newid();')
     author, quote = cur.fetchone()
 
     resp = {"author": author, "quote": quote}
