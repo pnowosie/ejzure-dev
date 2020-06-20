@@ -7,12 +7,15 @@ Użyjemy podpisu RSA, który jest trudniej zestawić, ale jest bezpieczniejszy i
 Przy takim podpisie APIM komunikuje się z dostawcą OpenID Connect aby pobrać (asymetryczny) klucz  publiczny. Aby nie zaciemniać rozwiązania (OpenID specyfikuje szereg endpoint-ów), ja wystawię jedynie konfigurację przekazującą kluczm dla APIM.
 
 # Generowanie kluczy
-| ssh-keygen -t rsa -b 2048 -m PEM -f jwtRS256.key<br># Don't add passphrase<br>openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub |
+
+```
+ssh-keygen -t rsa -b 2048 -m PEM -f jwtRS256.key # Don't add passphrase
+openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub
+```
 
 Podejrzyjmy nasz klucz publiczny 
 
-Pub key
-
+```
     > cat jwtRS256.key.pub
     -----BEGIN PUBLIC KEY-----
     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs3Ia872pFYalU66wR1lN
@@ -23,7 +26,7 @@ Pub key
     Rpp12p0bqQNLwybrrGmB95AUnlnzsnzzGUL7jek1g//ny/wl0tRSe5HU/DdXK8jr
     zwIDAQAB
     -----END PUBLIC KEY-----
-
+```
 
 # Przygotowanie konfiguracji dla klucza algorytmu RS256
 
@@ -34,7 +37,7 @@ W tym celu tworzę konto storage-owe i kontener o nazwie `openid-connect` nastę
 - konfiguracja: https://azuresd.blob.core.windows.net/openid-connect/cowsay/openid-config.json, który wskazuje plik klucza we właściwości `jwks-uri`
 - https://azuresd.blob.core.windows.net/openid-connect/cowsay/json-web-key-set.json
 
-Na marginesie, trochę mi zajęło aby doprosić się APIMa by łyknął mój klucz. Rozwiązuje to konwerter: https://russelldavies.github.io/jwk-creator/ (👍 Open Source)
+> Na marginesie, trochę mi zajęło aby doprosić się APIMa by łyknął mój klucz. Rozwiązuje to konwerter: https://russelldavies.github.io/jwk-creator/ (👍 Open Source)
 
 Mając przygotowaną konfigurację, konfigurujemy polisy (in-bound) dla mojej operacji 
 
@@ -54,7 +57,7 @@ Mając przygotowaną konfigurację, konfigurujemy polisy (in-bound) dla mojej op
 
 Nie ustawiam żadnych ról (claim-ów) wystarczy aby token był właściwie podpisany oraz nie przeterminował się (właściwość `exp`)
 
-Jeśli jesteś ciekaw co przesyłam w środku rozkoduj sobie przykładowy token w serwise JWT.io
+Jeśli jesteś ciekaw co przesyłam w środku rozkoduj sobie przykładowy token w serwise [JWT.io](https://jwt.io)
 
 
     eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBenVyZSBBUElNIENvd1NheSIsImlzcyI6IkNobXVyb3dpc2tvLCBBenVyZSBTRCIsImF1ZCI6InQzLWJhY2tlbmQuYXp1cmV3ZWJzaXRlcy5uZXQiLCJpYXQiOjE1OTI2NDY5OTksImV4cCI6MTU5Mjc1NDQwMH0.Wp5Jl77M30jDJWhQTGygW_gYo7gniUXG7cd1ORVqgVsWxu_I_Zi8sYEJWho2rlpwGa36SKW-06wY-RNMXUmDKUn07NZvQE3NSvk9xGJ4zeNqPwbf2bzbWpTW4ZAO2sxsCZUz7mliBt7SkO1_IbG94AbyA2U3ncFg8rBVR6vaohYra_-mVBkZfsUZnnLkhrA0gt4zqzdevbAT2RjFrk9Tvmx5IwSoPfMynLHm7JqOPO5VvuDIzDdmxpArw-ECyrSaU-zwH4hHTTG9eC3qUq1h1-gMZbV2HjXcpXA98qu7bp_gH6cWCC4FRIA-te3mCjZaOc76locjcLRzEdkUJ2dR_A
